@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUSESログイン</title>
+  </head>
+  <body>
+    ユーザー名：<input /> <button>ログイン</button>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        delete sessionStorage.username;
+        document.querySelector('input').value = '武庫川　花子';
+      });
+
+      document.querySelector('button').addEventListener('click', () => {
+        const username = document.querySelector('input').value;
+        if (!username) {
+          window.alert('ユーザー名を入力してください');
+        } else {
+          sessionStorage.username = username;
+          location.href = 'index.html';
+        }
+      });
+    </script>
+  </body>
+</html>
