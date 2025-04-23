@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const username = sessionStorage.username;
   if (!username) {
-    window.alert('ログインしてください');
+    window.alert('ログインしてください。。');
     location.href = 'login.html';
   }
   document.querySelector('#user_name span').textContent = username;
