@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const obj = await res.json();
   const data = obj.list;
   console.log(data);
+  const Inport = data[0]['imp']; ///重要を変数に抜き出し
+  console.log(Inport);
 
   document.querySelectorAll('span.unread').forEach((el) => (el.textContent = data.length));
 
