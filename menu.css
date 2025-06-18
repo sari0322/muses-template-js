@@ -122,3 +122,50 @@ main#info {
   list-style: none;
   padding-left: 0;
 }
+#category_buttons {
+  display: flex;
+  margin: 0; /* 余白なし */
+}
+
+/* ボタン */
+#category_buttons button {
+  appearance: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+  flex-grow: 1;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+/* ボタンの背景色 */
+#category_buttons button[data-category='important'] {
+  background-color: rgb(245, 158, 158); /* 赤 */
+}
+#category_buttons button[data-category='favorites'] {
+  background-color: #fff59e; /* 黄 */
+}
+#category_buttons button[data-category='job_search'] {
+  background-color: #aeda7c; /* 緑 */
+}
+#category_buttons button[data-category='read'] {
+  background-color: #e0e0e0; /* グレー */
+}
+
+/* アクティブボタンは下のボーダーを白に */
+#category_buttons button.active {
+  border-bottom: 3px solid white;
+}
+
+/* 件数表示 */
+#category_message {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0; /* 余白なし */
+  background-color: transparent; /* JSで色変更 */
+  color: #000;
+  user-select: none;
+}

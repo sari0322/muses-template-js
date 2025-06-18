@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.querySelectorAll('span.unread').forEach((el) => (el.textContent = obj.list.length));
 });
+
 const data = [
   { category: 'favorites', read: false },
   { category: 'favorites', read: false },
@@ -20,15 +21,28 @@ const data = [
   { category: 'read', read: false },
   { category: 'read', read: false },
   { category: 'read', read: false },
-  // その他カテゴリ（全て既読または0件）
   { category: 'important', read: true },
   { category: 'job_search', read: true }
 ];
 
-document.querySelectorAll('#category_buttons button').forEach((btn) => {
+const buttons = document.querySelectorAll('#category_buttons button');
+const message = document.getElementById('category_message');
+const wrapper = document.getElementById('category_wrapper');
+
+buttons.forEach((btn) => {
   btn.addEventListener('click', () => {
     const category = btn.dataset.category;
+
+    // 選択状態更新
+    buttons.forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // 件数計算
     const count = data.filter((item) => item.category === category && !item.read).length;
-    document.getElementById('category_message').textContent = `${count} 件あります`;
+    message.textContent = `未読表示が${count} 件あります`;
+
+    // 押されたボタンの背景色を取得してメッセージ背景に設定
+    const bgColor = window.getComputedStyle(btn).backgroundColor;
+    message.style.backgroundColor = bgColor;
   });
 });
