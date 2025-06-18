@@ -149,7 +149,7 @@ main#top div {
 }
 
 main#top div:nth-child(1) {
-  background-color: #f4bab8;
+  background-color: #d8c6f5;
 }
 
 main#top div:nth-child(2) {
@@ -162,7 +162,7 @@ main#top div:nth-child(3) {
 }
 
 main#top div:nth-child(4) {
-  background-color: #b55c92;
+  background-color: #f08cbc;
 }
 
 main#top div:nth-child(5) {
@@ -172,11 +172,9 @@ main#top div:nth-child(5) {
 main#top div:nth-child(6) {
   background-color: #c6fddd;
 }
-
-main#top div:nth-child(7) {
-  background-color: #e1febe;
+main#top div {
+  border-radius: 10px;
 }
-
 footer p {
   font-weight: bold;
   margin-bottom: 2rem;
@@ -257,13 +255,13 @@ body {
 
 /* ボタンの背景色 */
 #category_buttons button[data-category='important'] {
-  background-color: #f66; /* 赤 */
+  background-color: rgb(245, 158, 158); /* 赤 */
 }
 #category_buttons button[data-category='favorites'] {
-  background-color: #ffeb3b; /* 黄 */
+  background-color: #fff59e; /* 黄 */
 }
 #category_buttons button[data-category='job_search'] {
-  background-color: #8bc34a; /* 緑 */
+  background-color: #aeda7c; /* 緑 */
 }
 #category_buttons button[data-category='read'] {
   background-color: #e0e0e0; /* グレー */
