@@ -214,34 +214,73 @@ body {
   color: #000;
 }
 
-/* 背景色カテゴリ別 */
+#category_buttons button {
+  appearance: none;
+  border: none;
+  border-radius: 12px 12px 0 0;
+  padding: 10px 20px;
+  margin-right: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+  top: 3px;
+  transition: all 0.2s ease;
+  color: #000;
+}
+
+#category_wrapper {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden; /* 角丸のはみ出し防止 */
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+/* ボタン群 */
+#category_buttons {
+  display: flex;
+  margin: 0; /* 余白なし */
+}
+
+/* ボタン */
+#category_buttons button {
+  appearance: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+  flex-grow: 1;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+/* ボタンの背景色 */
 #category_buttons button[data-category='important'] {
   background-color: #f66; /* 赤 */
 }
-
 #category_buttons button[data-category='favorites'] {
   background-color: #ffeb3b; /* 黄 */
 }
-
 #category_buttons button[data-category='job_search'] {
   background-color: #8bc34a; /* 緑 */
 }
-
 #category_buttons button[data-category='read'] {
   background-color: #e0e0e0; /* グレー */
 }
 
-/* アクティブなボタン */
+/* アクティブボタンは下のボーダーを白に */
 #category_buttons button.active {
   border-bottom: 3px solid white;
-  z-index: 1;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* 件数表示 */
 #category_message {
-  padding: 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
+  padding: 10px 20px;
   font-size: 18px;
   font-weight: bold;
+  margin: 0; /* 余白なし */
+  background-color: transparent; /* JSで色変更 */
+  color: #000;
+  user-select: none;
 }

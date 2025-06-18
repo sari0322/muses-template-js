@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.querySelectorAll('span.unread').forEach((el) => (el.textContent = obj.list.length));
 });
+
 const data = [
   { category: 'favorites', read: false },
   { category: 'favorites', read: false },
@@ -26,6 +27,7 @@ const data = [
 
 const buttons = document.querySelectorAll('#category_buttons button');
 const message = document.getElementById('category_message');
+const wrapper = document.getElementById('category_wrapper');
 
 buttons.forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -37,7 +39,7 @@ buttons.forEach((btn) => {
 
     // 件数計算
     const count = data.filter((item) => item.category === category && !item.read).length;
-    message.textContent = `${count} 件あります`;
+    message.textContent = `未読表示が${count} 件あります`;
 
     // 押されたボタンの背景色を取得してメッセージ背景に設定
     const bgColor = window.getComputedStyle(btn).backgroundColor;
