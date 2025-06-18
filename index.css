@@ -188,3 +188,42 @@ footer p {
   height: 5rem;
   background-color: white;
 }
+
+#category_buttons {
+  display: flex;
+  border-bottom: 3px solid #ccc;
+  margin-bottom: 10px;
+}
+
+#category_buttons button {
+  appearance: none;
+  border: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 10px 20px;
+  margin-right: 5px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+  top: 3px;
+  transition: background-color 0.2s;
+}
+
+#category_buttons button:hover {
+  background-color: #d0d0ff;
+}
+
+#category_buttons button.active {
+  background-color: #ffffff;
+  border-bottom: 3px solid white;
+  z-index: 1;
+}
+
+#category_message {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  font-size: 18px;
+  font-weight: bold;
+}
