@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   console.log(data);
 
+  const infoList = document.getElementById('info_list');
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
 
