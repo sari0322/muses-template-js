@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const res = await fetch('data.json');
   const obj = await res.json();
   const data = obj.list;
-  console.log(data);
+  for (let i = 0; i < data.length - 1; i += 1) {
+    data[i].favorite = false;
+  }
+  console.log(data[0]);
   const Inport = data[0]['imp']; ///重要を変数に抜き出し
   console.log(Inport);
 
