@@ -12,18 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const obj = await res.json();
   const data = obj.list;
 
-  // const list=document.getElementById
-  for (let i = 0; i < data.length; i += 1) {
-    const Button = document.createElement('button');
-    Button.textContent = '☆';
-    data[i].favorite = false;
-    Button.addEventListener('click', () => {
-      data[i].favorite = true;
-      Button.textContent = data[i].favorite ? '★' : '☆';
-    });
-    data[i].myButton = Button;
-  } //お気に入りture or false
-
   console.log(data);
   const Inport = data[0]['imp']; ///重要を変数に抜き出し
   console.log(Inport);
@@ -58,12 +46,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         mark.appendChild(span);
         record.appendChild(mark);
       }
-
-      if (prop == 'myButton') {
-        const Span = document.createElement('span');
-        el.appendChild(item[prop]);
-      } ///ボタン要素表示
-
       record.appendChild(el);
     }
     info_list.appendChild(record);
