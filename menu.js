@@ -11,6 +11,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const res = await fetch('data.json');
   const obj = await res.json();
   const data = obj.list;
+  // const list=document.getElementById
+  for (let i = 0; i < data.length - 1; i += 1) {
+    const Button = document.createElement('button');
+    Button.textContent = '☆';
+    data[i].favorite = false;
+    Button.addEventListener('click', () => {
+      data[i].favorite = true;
+      Button[i].textContent = data[i].favorite ? '★' : '☆';
+    });
+    data[i].like = Button;
+  } //お気に入りture or false
+
   console.log(data);
   const Inport = data[0]['imp']; ///重要を変数に抜き出し
   console.log(Inport);
