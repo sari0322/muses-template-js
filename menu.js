@@ -13,6 +13,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const data = obj.list;
 
   console.log(data);
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
+
+    // 要素の生成
+    const record = document.createElement('div');
+    record.className = 'record';
+    record.style.border = '1px solid #ccc';
+    record.style.margin = '10px';
+    record.style.padding = '10px';
+  }
   const Inport = data[0]['imp']; ///重要を変数に抜き出し
   console.log(Inport);
 
