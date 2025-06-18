@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const data = obj.list;
 
   console.log(data);
-
+  /////以下追加　チャットGPT
   const infoList = document.getElementById('info_list');
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     infoList.appendChild(record);
   }
+  ////以上追加　チャットGPT
+
   const Inport = data[0]['imp']; ///重要を変数に抜き出し
   console.log(Inport);
 
@@ -50,6 +52,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       const el = document.createElement('div');
       if (prop == 'from') {
         el.innerHTML = val;
+      } else if ((prop = 'Button')) {
+        // ボタン要素を作成
+        const button = document.createElement('button');
+        button.textContent = val ? '★' : '☆';
+
+        // ボタンの状態管理（true/false切替）
+        button.addEventListener('click', () => {
+          item.Button = !item.Button;
+          button.textContent = item.Button ? '★' : '☆';
+          console.log(`${item.subject} のお気に入り状態: ${item.Button}`);
+        });
+
+        el.appendChild(button); // el にボタン追加
       } else {
         el.textContent = val;
       }
