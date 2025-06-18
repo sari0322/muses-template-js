@@ -13,6 +13,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   const data = obj.list;
 
   console.log(data);
+
+  const infoList = document.getElementById('info_list');
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
+
+    // 要素の生成
+    const record = document.createElement('div');
+    record.className = 'record';
+    record.style.border = '1px solid #ccc';
+    record.style.margin = '10px';
+    record.style.padding = '10px';
+
+    const button = document.createElement('button');
+    button.textContent = item.Button ? '★' : '☆';
+    button.addEventListener('click', () => {
+      item.Button = !item.Button;
+      button.textContent = item.Button ? '★' : '☆';
+      console.log(`${item.subject} のお気に入り状態: ${item.Button}`);
+    });
+    record.appendChild(button);
+
+    infoList.appendChild(record);
+  }
   const Inport = data[0]['imp']; ///重要を変数に抜き出し
   console.log(Inport);
 
