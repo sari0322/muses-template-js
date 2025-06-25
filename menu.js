@@ -96,5 +96,9 @@ buttons.forEach((btn) => {
     // 押されたボタンの背景色を取得してメッセージ背景に設定
     const bgColor = window.getComputedStyle(btn).backgroundColor;
     message.style.backgroundColor = bgColor;
+
+    if (bnt == bnt[buttons.length - 1]) {
+      const checkedCategory = buttons.classList.contains('active');
+    }
   });
 });
