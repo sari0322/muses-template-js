@@ -18,11 +18,14 @@ header {
 
 figure#logo {
   margin: 1rem 0;
+  text-align: left; /* ← 追加！左詰め */
 }
 
 #logo img {
   width: 16rem;
   height: 3rem;
+  display: block; /* ← 追加！インライン余白を消すため */
+  margin: 0; /* ← 追加！画像の左右余白をなくす */
 }
 
 #user_name {
