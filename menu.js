@@ -99,14 +99,3 @@ buttons.forEach((btn) => {
     message.style.backgroundColor = bgColor;
   });
 });
-// //表示するときに絞り込み
-//   console.log('buttons'),
-//   buttons.forEach((btn) => {
-//     btn.addEventListener('click', () => {
-//       if (bnt == buttons[buttons.length - 1]) {
-//         const activeCheckboxes = Array.from(document.querySelectorAll('#checklist')).filter((buttons) =>
-//           buttons.classList.contains('active')
-//         );
-//       }
-//     });
-// });
