@@ -1,54 +1,95 @@
 'use strict';
 
+let data = []; // JSONデータをここに保存
+
 document.addEventListener('DOMContentLoaded', async () => {
   const username = sessionStorage.username;
   if (!username) {
-    window.alert('ログインしてください');
+    alert('ログインしてください');
     location.href = 'login.html';
+    return;
   }
+
   document.querySelector('#user_name span').textContent = username;
 
   const res = await fetch('data.json');
   const obj = await res.json();
-  const data = obj.list;
+  data = obj.list;
 
-  console.log(data);
+  document.querySelectorAll('span.unread').forEach((el) => {
+    el.textContent = data.length;
+  });
 
-  const Inport = data[0]['imp']; ///重要を変数に抜き出し
-  console.log(Inport);
+  // 初期表示
+  renderList();
 
-  document.querySelectorAll('span.unread').forEach((el) => (el.textContent = data.length));
+  // お気に入りチェック時の絞り込み
+  const favCheckbox = document.querySelector('#filterFavorites');
+  if (favCheckbox) {
+    favCheckbox.addEventListener('change', () => {
+      renderList();
+    });
+  }
 
+  // カテゴリボタンの処理
+  const buttons = document.querySelectorAll('#category_buttons button');
+  const message = document.getElementById('category_message');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category;
+
+      // ボタン選択状態
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const count = data.filter((item) => item.category === category && item.read === false).length;
+
+      message.textContent = `未読表示が${count} 件あります`;
+
+      // 背景色も適用
+      const bgColor = window.getComputedStyle(btn).backgroundColor;
+      message.style.backgroundColor = bgColor;
+    });
+  });
+});
+
+// 情報リストを描画する関数
+function renderList(onlyFavorites = false) {
   const info_list = document.querySelector('div#info_list');
+  info_list.innerHTML = '';
 
   for (const item of data) {
+    // 引数が true のときだけお気に入りだけ表示
+    if (onlyFavorites && !item.Button) continue;
+
     const record = document.createElement('div');
     record.className = 'record';
+
     for (const [prop, val] of Object.entries(item)) {
       const el = document.createElement('div');
-      if (prop == 'from') {
+      el.className = prop;
+
+      if (prop === 'from') {
         el.innerHTML = val;
-      } else if (prop == 'Button') {
-        // ボタン要素を作成
+      } else if (prop === 'Button') {
         const button = document.createElement('button');
         button.textContent = val ? '★' : '☆';
 
-        // ボタンの状態管理（true/false切替）
+        // お気に入り切り替え処理
         button.addEventListener('click', () => {
           item.Button = !item.Button;
-          button.textContent = item.Button ? '★' : '☆';
-          console.log(`${item.subject} のお気に入り状態: ${item.Button}`);
+          renderList(onlyFavorites); // 表示中の状態を保持
         });
 
-        el.appendChild(button); // el にボタン追加
+        el.appendChild(button);
       } else {
         el.textContent = val;
       }
-      el.className = prop;
 
-      if (prop == 'subject') {
+      if (prop === 'subject') {
         const tri = document.createElement('div');
-        tri.textContent = '&nbsp;';
+        tri.textContent = '\u00A0';
         tri.className = 'tri';
         record.appendChild(tri);
 
@@ -60,53 +101,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         mark.appendChild(span);
         record.appendChild(mark);
       }
+
       record.appendChild(el);
     }
+
     info_list.appendChild(record);
   }
-});
+}
 
-const data = [
-  { category: 'favorites', read: false },
-  { category: 'favorites', read: false },
-  { category: 'read', read: false },
-  { category: 'read', read: false },
-  { category: 'read', read: false },
-  { category: 'read', read: false },
-  { category: 'important', read: true },
-  { category: 'job_search', read: true }
-];
+// 表示ボタンの処理
+document.addEventListener('DOMContentLoaded', () => {
+  const displayButton = document.querySelector('#checklist button');
 
-const buttons = document.querySelectorAll('#category_buttons button');
+  displayButton.addEventListener('click', () => {
+    // チェックされているカテゴリを取得
+    const checkedCategories = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]:checked')).map(
+      (checkbox) => checkbox.dataset.category
+    );
 
-const message = document.getElementById('category_message');
-const wrapper = document.getElementById('category_wrapper');
-
-buttons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const category = btn.dataset.category;
-
-    // 選択状態更新
-    buttons.forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    // 件数計算
-    const count = data.filter((item) => item.category === category && !item.read).length;
-    message.textContent = `未読表示が${count} 件あります`;
-
-    // 押されたボタンの背景色を取得してメッセージ背景に設定
-    const bgColor = window.getComputedStyle(btn).backgroundColor;
-    message.style.backgroundColor = bgColor;
+    // 「お気に入り」が含まれている場合のみ処理
+    if (checkedCategories.includes('favorites')) {
+      renderList(true); // お気に入りだけ表示
+    } else {
+      renderList(false); // 通常表示
+    }
   });
 });
-// //表示するときに絞り込み
-//   console.log('buttons'),
-//   buttons.forEach((btn) => {
-//     btn.addEventListener('click', () => {
-//       if (bnt == buttons[buttons.length - 1]) {
-//         const activeCheckboxes = Array.from(document.querySelectorAll('#checklist')).filter((buttons) =>
-//           buttons.classList.contains('active')
-//         );
-//       }
-//     });
-// });
