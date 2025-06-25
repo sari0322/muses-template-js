@@ -78,6 +78,7 @@ const data = [
 ];
 
 const buttons = document.querySelectorAll('#category_buttons button');
+
 const message = document.getElementById('category_message');
 const wrapper = document.getElementById('category_wrapper');
 
@@ -102,7 +103,14 @@ buttons.forEach((btn) => {
     //   const checkedCategory = buttons.classList.contains('active');
     // }
   });
-  const activeCheckboxes = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]')).filter(
-    (checkbox) => checkbox.classList.contains('active')
-  );
-});
+}),
+  console.log('buttons'),
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (bnt == buttons[buttons.length - 1]) {
+        const activeCheckboxes = Array.from(document.querySelectorAll('#checklist')).filter((buttons) =>
+          buttons.classList.contains('active')
+        );
+      }
+    });
+  });
