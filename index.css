@@ -282,7 +282,14 @@ body {
   color: #000;
   user-select: none;
 }
+#calendar {
+  display: flex;
+  flex-wrap: wrap;
+}
 
+section {
+  margin: 10px;
+}
 h1 {
   font-size: 18px;
 }
@@ -304,4 +311,7 @@ td:first-child {
 
 td:last-child {
   color: royalblue;
+}
+td.is-disabled {
+  color: #ccc;
 }

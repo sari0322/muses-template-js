@@ -96,5 +96,13 @@ buttons.forEach((btn) => {
     // 押されたボタンの背景色を取得してメッセージ背景に設定
     const bgColor = window.getComputedStyle(btn).backgroundColor;
     message.style.backgroundColor = bgColor;
+
+    //表示するときに絞り込み
+    // if (bnt == bnt[buttons.length - 1]) {
+    //   const checkedCategory = buttons.classList.contains('active');
+    // }
   });
+  const activeCheckboxes = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]')).filter(
+    (checkbox) => checkbox.classList.contains('active')
+  );
 });
