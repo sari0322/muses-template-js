@@ -1,1 +1,76 @@
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>予定入力</title>
+    <link href="index.css" rel="stylesheet" />
+    <link href="schedule.css" rel="stylesheet" />
+  </head>
+  <!DOCTYPE html>
 
+  <body>
+    <div class="container">
+      <div class="header">
+        <button class="cancel">キャンセル</button>
+        <button class="add">追加</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active">予定</button>
+        <button class="tab">リマインダー</button>
+      </div>
+
+      <input type="text" placeholder="タイトル" class="input-title" />
+      <input type="text" placeholder="場所またはビデオ通話" class="input-location" />
+
+      <div class="row">
+        <span>終日</span>
+        <button class="toggle">オン・オフ</button>
+      </div>
+
+      <div class="row">
+        <span>開始</span>
+        <input type="datetime-local" value="2025-05-06T13:00" />
+      </div>
+
+      <div class="row">
+        <span>終了</span>
+        <input type="datetime-local" value="2025-05-06T14:00" />
+      </div>
+
+      <div class="row">
+        <span>移動時間</span>
+        <span class="gray">なし</span>
+      </div>
+
+      <div class="row">
+        <span>繰り返し</span>
+        <span class="gray">しない</span>
+      </div>
+
+      <div class="row">
+        <span>カレンダー</span>
+        <span class="gray">自宅</span>
+      </div>
+
+      <div class="row">
+        <span>参加依頼受信者</span>
+        <span class="gray">なし</span>
+      </div>
+
+      <div class="row">
+        <span>通知</span>
+        <span class="gray">なし</span>
+      </div>
+
+      <div class="row">
+        <span>添付ファイルを追加</span>
+      </div>
+
+      <input type="url" placeholder="URL" class="input-url" />
+      <textarea placeholder="メモ" class="input-memo"></textarea>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
