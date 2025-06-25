@@ -56,7 +56,7 @@ const config = {
 };
 
 function showCalendar(year, month) {
-  for (i = 0; i < config.show; i++) {
+  for (const i = 0; i < config.show; i++) {
     const calendarHtml = createCalendar(year, month);
     const sec = document.createElement('section');
     sec.innerHTML = calendarHtml;
@@ -141,10 +141,10 @@ document.querySelector('#prev').addEventListener('click', moveCalendar);
 document.querySelector('#next').addEventListener('click', moveCalendar);
 
 showCalendar(year, month);
-const weeks = ['日', '月', '火', '水', '木', '金', '土'];
-const date = new Date();
-const year = date.getFullYear();
-const month = date.getMonth() + 1;
+// const weeks = ['日', '月', '火', '水', '木', '金', '土'];
+// const date = new Date();
+// const year = date.getFullYear();
+// const month = date.getMonth() + 1;
 const startDate = new Date(year, month - 1, 1); // 月の最初の日を取得
 const endDate = new Date(year, month, 0); // 月の最後の日を取得
 const endDayCount = endDate.getDate(); // 月の末日
