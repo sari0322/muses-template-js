@@ -78,6 +78,7 @@ const data = [
 ];
 
 const buttons = document.querySelectorAll('#category_buttons button');
+
 const message = document.getElementById('category_message');
 const wrapper = document.getElementById('category_wrapper');
 
@@ -96,5 +97,20 @@ buttons.forEach((btn) => {
     // 押されたボタンの背景色を取得してメッセージ背景に設定
     const bgColor = window.getComputedStyle(btn).backgroundColor;
     message.style.backgroundColor = bgColor;
+
+    //表示するときに絞り込み
+    // if (bnt == bnt[buttons.length - 1]) {
+    //   const checkedCategory = buttons.classList.contains('active');
+    // }
   });
-});
+}),
+  console.log('buttons'),
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (bnt == buttons[buttons.length - 1]) {
+        const activeCheckboxes = Array.from(document.querySelectorAll('#checklist')).filter((buttons) =>
+          buttons.classList.contains('active')
+        );
+      }
+    });
+  });
