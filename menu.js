@@ -1,6 +1,16 @@
 'use strict';
 
-let data = []; // JSONデータをここに保存
+let data = []; // JSONからの通知一覧データ
+const categoryData = [
+  { category: 'favorites', read: false },
+  { category: 'favorites', read: false },
+  { category: 'read', read: false },
+  { category: 'read', read: false },
+  { category: 'read', read: false },
+  { category: 'read', read: false },
+  { category: 'important', read: true },
+  { category: 'job_search', read: true }
+];
 
 document.addEventListener('DOMContentLoaded', async () => {
   const username = sessionStorage.username;
@@ -14,24 +24,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const res = await fetch('data.json');
   const obj = await res.json();
+
   data = obj.list;
 
   document.querySelectorAll('span.unread').forEach((el) => {
     el.textContent = data.length;
   });
 
-  // 初期表示
-  renderList();
+  renderList(); // 初期表示
 
-  // お気に入りチェック時の絞り込み
-  const favCheckbox = document.querySelector('#filterFavorites');
-  if (favCheckbox) {
-    favCheckbox.addEventListener('change', () => {
-      renderList();
-    });
-  }
+  // 表示ボタン処理（重要・お気に入りなどチェックされたカテゴリでフィルター）
+  const displayButton = document.querySelector('#checklist button');
+  displayButton.addEventListener('click', () => {
+    const checked = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]:checked'));
+    const selectedCategories = checked.map((c) => c.dataset.category);
 
-  // カテゴリボタンの処理
+    const options = {
+      important: selectedCategories.includes('important'),
+      favorites: selectedCategories.includes('favorites')
+    };
+
+    renderList(options);
+  });
+
+  // カテゴリボタンの未読件数表示処理
   const buttons = document.querySelectorAll('#category_buttons button');
   const message = document.getElementById('category_message');
 
@@ -39,30 +55,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.addEventListener('click', () => {
       const category = btn.dataset.category;
 
-      // ボタン選択状態
+      // ボタンのアクティブ表示切り替え
       buttons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
 
-      const count = data.filter((item) => item.category === category && item.read === false).length;
-
+      // 未読件数計算（categoryDataを使用）
+      const count = categoryData.filter((item) => item.category === category && !item.read).length;
       message.textContent = `未読表示が${count} 件あります`;
 
-      // 背景色も適用
+      // ボタンの背景色を取得しメッセージ背景に設定
       const bgColor = window.getComputedStyle(btn).backgroundColor;
       message.style.backgroundColor = bgColor;
     });
   });
 });
 
-// 情報リストを描画する関数
-function renderList(onlyFavorites = false) {
-  const info_list = document.querySelector('div#info_list');
+// renderList関数は元のまま（略）
+// ... ここにrenderList関数をコピペしてください ...
+
+function renderList(options = {}) {
+  const info_list = document.querySelector('#info_list');
   info_list.innerHTML = '';
 
   for (const item of data) {
-    // 引数が true のときだけお気に入りだけ表示
-    if (onlyFavorites && !item.Button) continue;
+    // OR条件でフィルタする処理
 
+    if (options.important && options.favorites) {
+      // 重要 または お気に入り のどちらかを満たせばOK
+      if (item.imp !== '★重要★' && !item.Button) continue;
+    } else if (options.important) {
+      // 重要のみチェックされている場合
+      if (item.imp !== '★重要★') continue;
+    } else if (options.favorites) {
+      // お気に入りのみチェックされている場合
+      if (!item.Button) continue;
+    }
+
+    // 両方チェックなしの場合は全件表示
+
+    // ... 以下は元の描画処理 ...
     const record = document.createElement('div');
     record.className = 'record';
 
@@ -76,10 +107,9 @@ function renderList(onlyFavorites = false) {
         const button = document.createElement('button');
         button.textContent = val ? '★' : '☆';
 
-        // お気に入り切り替え処理
         button.addEventListener('click', () => {
           item.Button = !item.Button;
-          renderList(onlyFavorites); // 表示中の状態を保持
+          renderList(options);
         });
 
         el.appendChild(button);
@@ -108,22 +138,3 @@ function renderList(onlyFavorites = false) {
     info_list.appendChild(record);
   }
 }
-
-// 表示ボタンの処理
-document.addEventListener('DOMContentLoaded', () => {
-  const displayButton = document.querySelector('#checklist button');
-
-  displayButton.addEventListener('click', () => {
-    // チェックされているカテゴリを取得
-    const checkedCategories = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]:checked')).map(
-      (checkbox) => checkbox.dataset.category
-    );
-
-    // 「お気に入り」が含まれている場合のみ処理
-    if (checkedCategories.includes('favorites')) {
-      renderList(true); // お気に入りだけ表示
-    } else {
-      renderList(false); // 通常表示
-    }
-  });
-});
