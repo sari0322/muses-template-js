@@ -97,8 +97,12 @@ buttons.forEach((btn) => {
     const bgColor = window.getComputedStyle(btn).backgroundColor;
     message.style.backgroundColor = bgColor;
 
-    if (bnt == bnt[buttons.length - 1]) {
-      const checkedCategory = buttons.classList.contains('active');
-    }
+    //表示するときに絞り込み
+    // if (bnt == bnt[buttons.length - 1]) {
+    //   const checkedCategory = buttons.classList.contains('active');
+    // }
   });
+  const activeCheckboxes = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]')).filter(
+    (checkbox) => checkbox.classList.contains('active')
+  );
 });
