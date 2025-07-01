@@ -1,54 +1,125 @@
 'use strict';
 
+let data = []; // JSONからの通知一覧データ
+const categoryData = [
+  { category: 'favorites', read: false },
+  { category: 'favorites', read: false },
+  { category: 'read', read: false },
+  { category: 'read', read: false },
+  { category: 'read', read: false },
+  { category: 'read', read: false },
+  { category: 'important', read: true },
+  { category: 'job_search', read: true }
+];
+
 document.addEventListener('DOMContentLoaded', async () => {
   const username = sessionStorage.username;
   if (!username) {
-    window.alert('ログインしてください');
+    alert('ログインしてください');
     location.href = 'login.html';
+    return;
   }
+
   document.querySelector('#user_name span').textContent = username;
 
   const res = await fetch('data.json');
   const obj = await res.json();
-  const data = obj.list;
 
-  console.log(data);
+  data = obj.list;
 
-  const Inport = data[0]['imp']; ///重要を変数に抜き出し
-  console.log(Inport);
+  document.querySelectorAll('span.unread').forEach((el) => {
+    el.textContent = data.length;
+  });
 
-  document.querySelectorAll('span.unread').forEach((el) => (el.textContent = data.length));
+  renderList(); // 初期表示
 
-  const info_list = document.querySelector('div#info_list');
+  // 表示ボタン処理（重要・お気に入りなどチェックされたカテゴリでフィルター）
+  const displayButton = document.querySelector('#checklist button');
+  displayButton.addEventListener('click', () => {
+    const checked = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]:checked'));
+    const selectedCategories = checked.map((c) => c.dataset.category);
+
+    const options = {
+      important: selectedCategories.includes('important'),
+      favorites: selectedCategories.includes('favorites')
+    };
+
+    renderList(options);
+  });
+
+  // カテゴリボタンの未読件数表示処理
+  const buttons = document.querySelectorAll('#category_buttons button');
+  const message = document.getElementById('category_message');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category;
+
+      // ボタンのアクティブ表示切り替え
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // 未読件数計算（categoryDataを使用）
+      const count = categoryData.filter((item) => item.category === category && !item.read).length;
+      message.textContent = `未読表示が${count} 件あります`;
+
+      // ボタンの背景色を取得しメッセージ背景に設定
+      const bgColor = window.getComputedStyle(btn).backgroundColor;
+      message.style.backgroundColor = bgColor;
+    });
+  });
+});
+
+// renderList関数は元のまま（略）
+// ... ここにrenderList関数をコピペしてください ...
+
+function renderList(options = {}) {
+  const info_list = document.querySelector('#info_list');
+  info_list.innerHTML = '';
 
   for (const item of data) {
+    // OR条件でフィルタする処理
+
+    if (options.important && options.favorites) {
+      // 重要 または お気に入り のどちらかを満たせばOK
+      if (item.imp !== '★重要★' && !item.Button) continue;
+    } else if (options.important) {
+      // 重要のみチェックされている場合
+      if (item.imp !== '★重要★') continue;
+    } else if (options.favorites) {
+      // お気に入りのみチェックされている場合
+      if (!item.Button) continue;
+    }
+
+    // 両方チェックなしの場合は全件表示
+
+    // ... 以下は元の描画処理 ...
     const record = document.createElement('div');
     record.className = 'record';
+
     for (const [prop, val] of Object.entries(item)) {
       const el = document.createElement('div');
-      if (prop == 'from') {
+      el.className = prop;
+
+      if (prop === 'from') {
         el.innerHTML = val;
-      } else if (prop == 'Button') {
-        // ボタン要素を作成
+      } else if (prop === 'Button') {
         const button = document.createElement('button');
         button.textContent = val ? '★' : '☆';
 
-        // ボタンの状態管理（true/false切替）
         button.addEventListener('click', () => {
           item.Button = !item.Button;
-          button.textContent = item.Button ? '★' : '☆';
-          console.log(`${item.subject} のお気に入り状態: ${item.Button}`);
+          renderList(options);
         });
 
-        el.appendChild(button); // el にボタン追加
+        el.appendChild(button);
       } else {
         el.textContent = val;
       }
-      el.className = prop;
 
-      if (prop == 'subject') {
+      if (prop === 'subject') {
         const tri = document.createElement('div');
-        tri.textContent = '&nbsp;';
+        tri.textContent = '\u00A0';
         tri.className = 'tri';
         record.appendChild(tri);
 
@@ -60,42 +131,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         mark.appendChild(span);
         record.appendChild(mark);
       }
+
       record.appendChild(el);
     }
+
     info_list.appendChild(record);
   }
-});
-
-const data = [
-  { category: 'favorites', read: false },
-  { category: 'favorites', read: false },
-  { category: 'read', read: false },
-  { category: 'read', read: false },
-  { category: 'read', read: false },
-  { category: 'read', read: false },
-  { category: 'important', read: true },
-  { category: 'job_search', read: true }
-];
-
-const buttons = document.querySelectorAll('#category_buttons button');
-
-const message = document.getElementById('category_message');
-const wrapper = document.getElementById('category_wrapper');
-
-buttons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const category = btn.dataset.category;
-
-    // 選択状態更新
-    buttons.forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    // 件数計算
-    const count = data.filter((item) => item.category === category && !item.read).length;
-    message.textContent = `未読表示が${count} 件あります`;
-
-    // 押されたボタンの背景色を取得してメッセージ背景に設定
-    const bgColor = window.getComputedStyle(btn).backgroundColor;
-    message.style.backgroundColor = bgColor;
-  });
-});
+}
