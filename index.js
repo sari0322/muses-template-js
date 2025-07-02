@@ -116,20 +116,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 document.addEventListener('DOMContentLoaded', () => {
-  // 既存の処理のあとに
-
   const infoDiv = document.getElementById('information');
-  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  let schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
 
-  if (schedules.length === 0) {
-    infoDiv.textContent = '予定はありません。';
-  } else {
-    // 予定リストを作る
+  function renderSchedules() {
+    if (schedules.length === 0) {
+      infoDiv.textContent = '予定はありません。';
+      return;
+    }
+
     const ul = document.createElement('ul');
-    schedules.forEach((schedule) => {
+    schedules.forEach((schedule, index) => {
       const li = document.createElement('li');
 
-      // 日付フォーマット例（YYYY-MM-DD HH:MM）
       const startDate = new Date(schedule.start);
       const endDate = new Date(schedule.end);
       const startStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(
@@ -145,10 +144,25 @@ document.addEventListener('DOMContentLoaded', () => {
         '0'
       )}`;
 
-      li.textContent = `${schedule.title}  ${startStr} ～ ${endStr}`;
+      li.textContent = `${schedule.title}  ${startStr} ～ ${endStr} `;
+
+      // 削除ボタン作成
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '削除';
+      deleteBtn.style.marginLeft = '10px';
+      deleteBtn.addEventListener('click', () => {
+        schedules.splice(index, 1); // 配列から削除
+        localStorage.setItem('schedules', JSON.stringify(schedules)); // 保存更新
+        renderSchedules(); // 再描画
+      });
+
+      li.appendChild(deleteBtn);
       ul.appendChild(li);
     });
+
     infoDiv.innerHTML = '';
     infoDiv.appendChild(ul);
   }
+
+  renderSchedules();
 });
