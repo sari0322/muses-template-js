@@ -78,10 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
           const events = eventList.filter((ev) => ev.date === dateStr);
           let eventHtml = '';
-          if (events.length > 0) {
-            // タイトルは表示せず、丸印だけ表示
-            eventHtml = `<div class="event-dot"></div>`;
-          }
+
           calendarHtml += `<td><div class="day-number">${day}</div>${eventHtml}</td>`;
           day++;
         }
