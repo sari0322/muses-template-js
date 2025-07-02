@@ -97,6 +97,7 @@ addButton.addEventListener('click', () => {
 
   localStorage.setItem('schedules', JSON.stringify(schedules));
   localStorage.setItem('scheduledDates', JSON.stringify(storedDates));
+  renderSchedules();
 
   // 通知確認（追加直後にも1回通知させるなら以下）
   if (Notification.permission !== 'granted') {
