@@ -9,6 +9,10 @@ window.onload = function () {
   const notification = new Notification('Check!');
 };
 
+//日付指定
+const start = document.getElementById('start');
+const end = document.getElementById('end');
+const storage = localStorage;
 //通知
 
 let selected = null;
@@ -21,6 +25,20 @@ const titleInput = document.getElementById('title');
 const notificationSelect = document.getElementById('notification');
 
 addButton.addEventListener('click', () => {
+  const newEvent = { date: dateOnly, title: titleValue };
+
+  // 既存の予定を取得
+  const eventList = JSON.parse(localStorage.getItem('scheduledEvents') || '[]');
+  eventList.push(newEvent);
+
+  // 保存
+  localStorage.setItem('scheduledEvents', JSON.stringify(eventList));
+
+  if (!storedDates.includes(dateOnly)) {
+    storedDates.push(dateOnly);
+    localStorage.setItem('scheduledDates', JSON.stringify(storedDates));
+  }
+
   titleText = titleInput.value.trim();
   selected = notificationSelect.value;
   startTime = new Date(document.getElementById('start').value);

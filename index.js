@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const startDay = startDate.getDay();
     const endDay = endDate.getDate();
 
+    const eventList = JSON.parse(localStorage.getItem('scheduledEvents') || '[]');
+
     let day = 1;
     let calendarHtml = `<h1>${year}年 ${month}月</h1>`;
     calendarHtml += '<table>';
@@ -73,7 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (day > endDay) {
           calendarHtml += '<td class="is-disabled"></td>';
         } else {
-          calendarHtml += `<td>${day}</td>`;
+          const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const events = eventList.filter((ev) => ev.date === dateStr);
+          let eventHtml = '';
+          if (events.length > 0) {
+            eventHtml = events.map((ev) => `<div class="event-title">${ev.title}</div>`).join('');
+          }
+          calendarHtml += `<td><div class="day-number">${day}</div>${eventHtml}</td>`;
           day++;
         }
       }
