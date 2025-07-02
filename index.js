@@ -115,3 +115,40 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCalendar(currentYear, currentMonth);
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  // 既存の処理のあとに
+
+  const infoDiv = document.getElementById('information');
+  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+
+  if (schedules.length === 0) {
+    infoDiv.textContent = '予定はありません。';
+  } else {
+    // 予定リストを作る
+    const ul = document.createElement('ul');
+    schedules.forEach((schedule) => {
+      const li = document.createElement('li');
+
+      // 日付フォーマット例（YYYY-MM-DD HH:MM）
+      const startDate = new Date(schedule.start);
+      const endDate = new Date(schedule.end);
+      const startStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(
+        startDate.getDate()
+      ).padStart(2, '0')} ${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(
+        2,
+        '0'
+      )}`;
+      const endStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(
+        endDate.getDate()
+      ).padStart(2, '0')} ${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(
+        2,
+        '0'
+      )}`;
+
+      li.textContent = `${schedule.title}  ${startStr} ～ ${endStr}`;
+      ul.appendChild(li);
+    });
+    infoDiv.innerHTML = '';
+    infoDiv.appendChild(ul);
+  }
+});

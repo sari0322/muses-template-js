@@ -105,3 +105,21 @@ const checktime = function () {
   }
 };
 setInterval(checktime, 1000 * 30); // 30秒ごと
+
+document.querySelector('.add').addEventListener('click', () => {
+  const title = document.getElementById('title').value.trim();
+  const start = document.getElementById('start').value;
+  const end = document.getElementById('end').value;
+
+  if (!title || !start || !end) {
+    alert('タイトル、開始日時、終了日時は必須です。');
+    return;
+  }
+
+  const newSchedule = { title, start, end };
+  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  schedules.push(newSchedule);
+  localStorage.setItem('schedules', JSON.stringify(schedules));
+
+  window.location.href = 'index.html'; // index.htmlに遷移
+});
