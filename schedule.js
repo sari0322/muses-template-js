@@ -13,6 +13,7 @@ window.onload = function () {
 const start = document.getElementById('start');
 const end = document.getElementById('end');
 const storage = localStorage;
+const title = document.getElementById('title');
 //通知
 
 let selected = null;
@@ -21,12 +22,13 @@ let titleText = '';
 let lastNotified = null;
 let previousMinutes = -1;
 const addButton = document.querySelector('.add');
-const titleInput = document.getElementById('title');
+// const titleInput = document.getElementById('title');
 const notificationSelect = document.getElementById('notification');
+let storedDates = JSON.parse(localStorage.getItem('scheduledDates') || '[]');
 
 addButton.addEventListener('click', () => {
-  const dateOnly = startValue.split('T')[0];
-  const newEvent = { date: dateOnly, title: titleValue };
+  const dateOnly = start.value.split('T')[0];
+  const newEvent = { date: dateOnly, title: title.value };
 
   // 既存の予定を取得
   const eventList = JSON.parse(localStorage.getItem('scheduledEvents') || '[]');
@@ -40,7 +42,7 @@ addButton.addEventListener('click', () => {
     localStorage.setItem('scheduledDates', JSON.stringify(storedDates));
   }
 
-  titleText = titleInput.value.trim();
+  titleText = title.value.trim();
   selected = notificationSelect.value;
   startTime = new Date(document.getElementById('start').value);
 
@@ -49,10 +51,10 @@ addButton.addEventListener('click', () => {
     return;
   }
 
-  if (selected === 'しない' || !selected) {
-    alert('通知は設定されていません');
-    return;
-  }
+  // if (selected === 'しない' || !selected) {
+  //   alert('通知は設定されていません');
+  //   return;
+  // }
 
   // 通知確認（追加直後にも1回通知させるなら以下）
   if (Notification.permission !== 'granted') {
