@@ -50,6 +50,7 @@ addButton.addEventListener('click', () => {
     return;
   }
 
+  ////繰り返し設定
   const repeatSelect = notificationSelect.value;
   const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
   const storedDates = JSON.parse(localStorage.getItem('scheduledDates') || '[]');
