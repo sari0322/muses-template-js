@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // カレンダー再描画用
   let currentYear = 2025; // 初期値、必要に応じて変更
-  let currentMonth = 6;
+  let currentMonth = 7;
 
   // renderCalendar 関数はあなたの既存コードを使う想定
 
