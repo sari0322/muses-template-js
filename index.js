@@ -116,20 +116,26 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 document.addEventListener('DOMContentLoaded', () => {
-  // 既存の処理のあとに
-
   const infoDiv = document.getElementById('information');
-  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  let schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  let scheduledEvents = JSON.parse(localStorage.getItem('scheduledEvents') || '[]');
 
-  if (schedules.length === 0) {
-    infoDiv.textContent = '予定はありません。';
-  } else {
-    // 予定リストを作る
+  // カレンダー再描画用
+  let currentYear = 2025; // 初期値、必要に応じて変更
+  let currentMonth = 6;
+
+  // renderCalendar 関数はあなたの既存コードを使う想定
+
+  function renderSchedules() {
+    if (schedules.length === 0) {
+      infoDiv.textContent = '予定はありません。';
+      return;
+    }
+
     const ul = document.createElement('ul');
-    schedules.forEach((schedule) => {
+    schedules.forEach((schedule, index) => {
       const li = document.createElement('li');
 
-      // 日付フォーマット例（YYYY-MM-DD HH:MM）
       const startDate = new Date(schedule.start);
       const endDate = new Date(schedule.end);
       const startStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(
@@ -145,10 +151,38 @@ document.addEventListener('DOMContentLoaded', () => {
         '0'
       )}`;
 
-      li.textContent = `${schedule.title}  ${startStr} ～ ${endStr}`;
+      li.textContent = `${schedule.title}  ${startStr} ～ ${endStr} `;
+
+      // 削除ボタン作成
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '削除';
+      deleteBtn.style.marginLeft = '10px';
+      deleteBtn.addEventListener('click', () => {
+        // schedules から削除
+        schedules.splice(index, 1);
+        localStorage.setItem('schedules', JSON.stringify(schedules));
+
+        // scheduledEvents からも該当予定を削除（title と start で判定など）
+        const scheduleToDelete = schedule; // 削除対象
+        scheduledEvents = scheduledEvents.filter((ev) => {
+          // 例えばタイトルと開始日が同じなら削除対象
+          return !(ev.title === scheduleToDelete.title && ev.date === scheduleToDelete.start.substr(0, 10));
+        });
+        localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEvents));
+
+        renderSchedules();
+
+        // カレンダー再描画
+        renderCalendar(currentYear, currentMonth);
+      });
+
+      li.appendChild(deleteBtn);
       ul.appendChild(li);
     });
+
     infoDiv.innerHTML = '';
     infoDiv.appendChild(ul);
   }
+
+  renderSchedules();
 });
