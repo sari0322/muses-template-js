@@ -6,7 +6,6 @@ const add = document.getElementsByClassName('add');
 
 window.onload = function () {
   Notification.requestPermission();
-  const notification = new Notification('Check!');
 };
 
 //日付指定
@@ -51,10 +50,51 @@ addButton.addEventListener('click', () => {
     return;
   }
 
-  // if (selected === 'しない' || !selected) {
-  //   alert('通知は設定されていません');
-  //   return;
-  // }
+  const repeatSelect = notificationSelect.value;
+  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  const storedDates = JSON.parse(localStorage.getItem('scheduledDates') || '[]');
+
+  const startDate = new Date(startInput);
+  const endDate = new Date(endInput);
+  const repeatCount = 10; // 繰り返し回数（例）
+
+  for (let i = 0; i < repeatCount; i++) {
+    const newStart = new Date(startDate);
+    const newEnd = new Date(endDate);
+
+    if (repeatSelect === '毎日') {
+      newStart.setDate(startDate.getDate() + i);
+      newEnd.setDate(endDate.getDate() + i);
+    } else if (repeatSelect === '毎週') {
+      newStart.setDate(startDate.getDate() + i * 7);
+      newEnd.setDate(endDate.getDate() + i * 7);
+    } else if (repeatSelect === '隔週') {
+      newStart.setDate(startDate.getDate() + i * 14);
+      newEnd.setDate(endDate.getDate() + i * 14);
+    } else if (repeatSelect === '毎月') {
+      newStart.setMonth(startDate.getMonth() + i);
+      newEnd.setMonth(endDate.getMonth() + i);
+    } else if (repeatSelect === '毎年') {
+      newStart.setFullYear(startDate.getFullYear() + i);
+      newEnd.setFullYear(endDate.getFullYear() + i);
+    } else if (repeatSelect === 'しない') {
+      if (i > 0) break;
+    }
+
+    schedules.push({
+      title: titleText,
+      start: newStart.toISOString(),
+      end: newEnd.toISOString()
+    });
+
+    const dateOnly = newStart.toISOString().split('T')[0];
+    if (!storedDates.includes(dateOnly)) {
+      storedDates.push(dateOnly);
+    }
+  }
+
+  localStorage.setItem('schedules', JSON.stringify(schedules));
+  localStorage.setItem('scheduledDates', JSON.stringify(storedDates));
 
   // 通知確認（追加直後にも1回通知させるなら以下）
   if (Notification.permission !== 'granted') {
@@ -98,15 +138,7 @@ const checktime = function () {
     new Notification(`「${titleText}」の通知：開始時間です`);
     lastNotified = new Date(currentTime);
   }
-
-  // 1分ごとのデバッグ用通知
-  const minutes = currentTime.getMinutes();
-  if (previousMinutes !== minutes) {
-    previousMinutes = minutes;
-    new Notification(`（1分チェック）「${titleText}」`);
-  }
 };
-setInterval(checktime, 1000 * 30); // 30秒ごと
 
 document.querySelector('.add').addEventListener('click', () => {
   const title = document.getElementById('title').value.trim();
@@ -118,10 +150,10 @@ document.querySelector('.add').addEventListener('click', () => {
     return;
   }
 
-  const newSchedule = { title, start, end };
-  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
-  schedules.push(newSchedule);
-  localStorage.setItem('schedules', JSON.stringify(schedules));
+  // const newSchedule = { title, start, end };
+  // const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  // schedules.push(newSchedule);
+  // localStorage.setItem('schedules', JSON.stringify(schedules));
 
   window.location.href = 'index.html'; // index.htmlに遷移
 });
