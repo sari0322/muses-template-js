@@ -51,12 +51,13 @@ addButton.addEventListener('click', () => {
   }
 
   ////繰り返し設定
-  const repeatSelect = notificationSelect.value;
+  const repeatSelect = document.getElementById('repeat').value;
   const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
   const storedDates = JSON.parse(localStorage.getItem('scheduledDates') || '[]');
 
-  const startDate = new Date(startInput);
-  const endDate = new Date(endInput);
+  const startDate = new Date(start.value);
+  const endDate = new Date(end.value);
+
   const repeatCount = 10; // 繰り返し回数（例）
 
   for (let i = 0; i < repeatCount; i++) {
