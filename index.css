@@ -323,3 +323,10 @@ th {
   background-color: #f9f9f9;
   color: #ccc;
 }
+.event-dot {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  margin: 4px auto 0 auto; /* 上に余白を空けて中央寄せ */
+}
