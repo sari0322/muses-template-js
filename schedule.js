@@ -25,6 +25,7 @@ const titleInput = document.getElementById('title');
 const notificationSelect = document.getElementById('notification');
 
 addButton.addEventListener('click', () => {
+  const dateOnly = startValue.split('T')[0];
   const newEvent = { date: dateOnly, title: titleValue };
 
   // 既存の予定を取得
