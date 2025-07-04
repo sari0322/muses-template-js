@@ -98,50 +98,7 @@ addButton.addEventListener('click', () => {
   localStorage.setItem('schedules', JSON.stringify(schedules));
   localStorage.setItem('scheduledDates', JSON.stringify(storedDates));
   renderSchedules();
-
-  // 通知確認（追加直後にも1回通知させるなら以下）
-  if (Notification.permission !== 'granted') {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        new Notification(`「${titleText}」を登録しました（${selected}通知）`);
-      }
-    });
-  } else {
-    new Notification(`「${titleText}」を登録しました（${selected}通知）`);
-  }
 });
-const checktime = function () {
-  const currentTime = new Date();
-
-  if (!selected || selected === 'しない' || !startTime || !titleText) return;
-
-  const targetTime = new Date(currentTime);
-
-  if (selected === '毎日') {
-    targetTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
-  } else if (selected === '毎週') {
-    if (currentTime.getDay() !== startTime.getDay()) return;
-    targetTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
-  } else if (selected === '隔週') {
-    const weekNumber = getWeekNumber(currentTime);
-    const startWeekNumber = getWeekNumber(startTime);
-    if ((weekNumber - startWeekNumber) % 2 !== 0 || currentTime.getDay() !== startTime.getDay()) return;
-    targetTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
-  } else if (selected === '毎月') {
-    if (currentTime.getDate() !== startTime.getDate()) return;
-    targetTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
-  } else {
-    return;
-  }
-
-  const timeDiff = Math.abs(currentTime - targetTime);
-  const hasNotifiedRecently = lastNotified && Math.abs(currentTime - lastNotified) < 60000;
-
-  if (timeDiff < 60000 && !hasNotifiedRecently) {
-    new Notification(`「${titleText}」の通知：開始時間です`);
-    lastNotified = new Date(currentTime);
-  }
-};
 
 document.querySelector('.add').addEventListener('click', () => {
   const title = document.getElementById('title').value.trim();
@@ -160,3 +117,47 @@ document.querySelector('.add').addEventListener('click', () => {
 
   window.location.href = 'index.html'; // index.htmlに遷移
 });
+
+setInterval(() => {
+  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+  const now = new Date();
+
+  schedules.forEach((schedule) => {
+    const startTime = new Date(schedule.start);
+    const title = schedule.title;
+
+    // 通知設定を取得
+    const notificationSetting = document.getElementById('notification').value;
+
+    let notifyTime = new Date(startTime);
+    if (notificationSetting === '5分前') {
+      notifyTime.setMinutes(startTime.getMinutes() - 5);
+    } else if (notificationSetting === '30分前') {
+      notifyTime.setMinutes(startTime.getMinutes() - 30);
+    } else if (notificationSetting === '一時間前') {
+      notifyTime.setHours(startTime.getHours() - 1);
+    } else if (notificationSetting === '一日前') {
+      notifyTime.setDate(startTime.getDate() - 1);
+    } else {
+      return; // 通知設定が「しない」の場合は何もしない
+    }
+
+    const timeDiff = Math.abs(now - notifyTime);
+    const within1min = timeDiff <= 60000; // 1分以内
+
+    const notifiedKey = `notified_${title}_${schedule.start}`;
+    if (within1min && !localStorage.getItem(notifiedKey)) {
+      if (Notification.permission === 'granted') {
+        new Notification(`「${title}」の通知：もうすぐ予定が始まります`);
+        localStorage.setItem(notifiedKey, 'true'); // 二重通知を防ぐ
+      } else {
+        Notification.requestPermission().then((perm) => {
+          if (perm === 'granted') {
+            new Notification(`「${title}」の通知：もうすぐ予定が始まります`);
+            localStorage.setItem(notifiedKey, 'true');
+          }
+        });
+      }
+    }
+  });
+}, 60000); // 1分ごとに確認
