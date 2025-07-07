@@ -58,7 +58,17 @@ addButton.addEventListener('click', () => {
   const startDate = new Date(start.value);
   const endDate = new Date(end.value);
 
-  const repeatCount = 10; // 繰り返し回数（例）
+  let repeatCount = 1;
+
+  if (repeatSelect === '毎日') {
+    repeatCount = 7; // 7日間
+  } else if (repeatSelect === '毎週') {
+    repeatCount = 4; // 4週間
+  } else if (repeatSelect === '毎月') {
+    repeatCount = 3; // 3ヶ月
+  } else if (repeatSelect === '毎年') {
+    repeatCount = 2; // 2年
+  }
 
   for (let i = 0; i < repeatCount; i++) {
     const newStart = new Date(startDate);
@@ -70,9 +80,6 @@ addButton.addEventListener('click', () => {
     } else if (repeatSelect === '毎週') {
       newStart.setDate(startDate.getDate() + i * 7);
       newEnd.setDate(endDate.getDate() + i * 7);
-    } else if (repeatSelect === '隔週') {
-      newStart.setDate(startDate.getDate() + i * 14);
-      newEnd.setDate(endDate.getDate() + i * 14);
     } else if (repeatSelect === '毎月') {
       newStart.setMonth(startDate.getMonth() + i);
       newEnd.setMonth(endDate.getMonth() + i);
@@ -138,6 +145,9 @@ setInterval(() => {
       notifyTime.setHours(startTime.getHours() - 1);
     } else if (notificationSetting === '一日前') {
       notifyTime.setDate(startTime.getDate() - 1);
+    } else if (notificationSetting === '予定の時刻') {
+      // 予定の時刻に通知
+      notifyTime = startTime;
     } else {
       return; // 通知設定が「しない」の場合は何もしない
     }
@@ -161,3 +171,20 @@ setInterval(() => {
     }
   });
 }, 60000); // 1分ごとに確認
+
+function renderFooterSchedules() {
+  const footerList = document.getElementById('footerScheduleList');
+  footerList.innerHTML = ''; // 一旦リセット
+
+  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+
+  schedules.forEach((schedule) => {
+    const li = document.createElement('li');
+    const date = new Date(schedule.start);
+    li.textContent = `「${schedule.title}」: ${date.toLocaleString()}`;
+    footerList.appendChild(li);
+  });
+}
+
+renderSchedules();
+renderFooterSchedules(); // ←これを追加
