@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('span.unread').forEach((el) => (el.textContent = obj.list.length));
 
   renderCalendar(currentYear, currentMonth);
-  renderSchedules(); // ← 必ず呼び出す
+  renderSchedules();
 });
 
 // カテゴリボタン
@@ -100,7 +100,7 @@ document.getElementById('next').addEventListener('click', () => {
   renderCalendar(currentYear, currentMonth);
 });
 
-// Information欄の予定表示（＋削除対応）
+// Information欄の予定表示
 function renderSchedules() {
   const infoDiv = document.getElementById('information');
   let schedules = JSON.parse(localStorage.getItem('schedules') || '[]');

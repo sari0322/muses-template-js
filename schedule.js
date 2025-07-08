@@ -67,6 +67,5 @@ document.querySelector('.add').addEventListener('click', () => {
   localStorage.setItem('scheduledDates', JSON.stringify(scheduledDates));
   localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEvents));
 
-  // ✅ 保存が完了したら index.html に移動
   window.location.href = 'index.html';
 });
