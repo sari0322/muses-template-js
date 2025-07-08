@@ -1,3 +1,5 @@
+'use strict';
+
 document.querySelector('.add').addEventListener('click', () => {
   const titleInput = document.getElementById('title');
   const startInput = document.getElementById('start');

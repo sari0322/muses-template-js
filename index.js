@@ -8,6 +8,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   document.querySelector('#user_name span').textContent = username;
 
+  // 通知権限の確認とリクエスト、通知のスケジューリング
+  (async () => {
+    if (!('Notification' in window)) {
+      console.log('このブラウザは通知に対応していません。');
+      return;
+    }
+
+    if (Notification.permission !== 'granted') {
+      await Notification.requestPermission();
+    }
+
+    if (Notification.permission === 'granted') {
+      scheduleNotifications();
+    }
+  })();
+
   const res = await fetch('data.json');
   const obj = await res.json();
 
@@ -15,6 +31,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   renderCalendar(currentYear, currentMonth);
   renderSchedules();
+  function scheduleNotifications() {
+    const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+
+    schedules.forEach((schedule) => {
+      const notificationTime = new Date(schedule.start).getTime();
+      const now = Date.now();
+      const delay = notificationTime - now;
+
+      // 通知予定時刻が未来のときだけセット
+      if (delay > 0) {
+        setTimeout(() => {
+          if (Notification.permission === 'granted') {
+            new Notification(`${schedule.title} の時間です！`);
+          }
+        }, delay);
+      }
+    });
+  }
 });
 
 // カテゴリボタン
