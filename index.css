@@ -187,7 +187,17 @@ footer p {
   border: solid 1px #feb64a;
   border-radius: 0.5rem;
   height: 5rem;
+  overflow-y: auto;
   background-color: white;
+}
+
+.inner {
+  /* 親要素からはみ出ないように設定 */
+  height: 100%;
+  /* 縦スクロールの設定 */
+  overflow-y: auto;
+  /*スクロールバーで内容が隠れないように*/
+  padding-right: 0.5rem;
 }
 
 body {
