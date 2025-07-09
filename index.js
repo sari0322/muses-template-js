@@ -31,42 +31,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   renderCalendar(currentYear, currentMonth);
   renderSchedules();
-  function scheduleNotifications() {
-    const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
-
-    schedules.forEach((schedule) => {
-      const title = schedule.title;
-      const startTime = new Date(schedule.start).getTime();
-      const now = Date.now();
-      // const notificationTime = new Date(schedule.start).getTime(); // ← 通知時刻が予定開始時刻
-      // const delay = notificationTime - now;
-      const notifications = [
-        { offset: 24 * 60 * 60 * 1000, message: ' の1日前です！' }, // 1日前
-        { offset: 60 * 60 * 1000, message: ' の1時間前です！' }, // 1時間前
-        { offset: 30 * 60 * 1000, message: ' の30分前です！' }, // 30分前
-        { offset: 5 * 60 * 1000, message: ' の5分前です！' }, // 5分前
-        { offset: 0, message: ' の時間です！' } // 予定時刻
-      ];
-      notifications.forEach(({ offset, message }) => {
-        const notifyTime = startTime - offset;
-        const delay = notifyTime - now;
-
-        if (delay > 0) {
-          setTimeout(() => {
-            if (Notification.permission === 'granted') {
-              new Notification(`${title}${message}`);
-            }
-          }, delay);
-        }
-      });
-      // if (delay > 0) {
-      //   setTimeout(() => {
-      //     new Notification(`${schedule.title} の時間です！`);
-      //   }, delay);
-      // }
-    });
-  }
 });
+
+// ✅ 外に定義された通知関数
+function scheduleNotifications() {
+  const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+
+  schedules.forEach((schedule) => {
+    const selected = schedule.notification;
+
+    const notificationTimes = {
+      予定の時刻: 0,
+      '5分前': 5 * 60 * 1000,
+      '30分前': 30 * 60 * 1000,
+      一時間前: 60 * 60 * 1000,
+      一日前: 24 * 60 * 60 * 1000
+    };
+
+    const advance = notificationTimes[selected];
+    if (advance === undefined) return;
+
+    const notificationTime = new Date(schedule.start).getTime() - advance;
+    const delay = notificationTime - Date.now();
+
+    if (delay > 0) {
+      setTimeout(() => {
+        if (Notification.permission === 'granted') {
+          new Notification(`${schedule.title} の${selected}です！`);
+        }
+      }, delay);
+    }
+  });
+}
 
 // カテゴリボタン
 const data = [

@@ -51,7 +51,8 @@ document.querySelector('.add').addEventListener('click', () => {
     schedules.push({
       title: titleText,
       start: newStart.toISOString(),
-      end: newEnd.toISOString()
+      end: newEnd.toISOString(),
+      notification: notificationSelect.value
     });
 
     const dateOnly = newStart.toISOString().split('T')[0];
